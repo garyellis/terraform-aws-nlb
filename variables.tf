@@ -41,11 +41,6 @@ variable "target_groups_count" {
 variable "target_group_health_checks" {
   default = []
 }
-variable "target_group_attachments" {
-  description = "target group instance id attachments"
-  type = "list"
-  default = []
-}
 
 variable "vpc_id" {
   description = "the target vpc id"
