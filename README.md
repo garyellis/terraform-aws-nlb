@@ -2,4 +2,5 @@
 Creates the following combinations of network load balancers:
 
 * external or internally facing load balancer
-* target group type ip or instance
+* a list of listeners
+* a list of target groups and corresponding health checks. target types instance and ip are both supported
