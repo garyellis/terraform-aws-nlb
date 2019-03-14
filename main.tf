@@ -38,5 +38,6 @@ resource "aws_lb_target_group" "target_group" {
     path                = "${lookup(var.target_group_health_checks[count.index], "path")}"
     protocol            = "${lookup(var.target_group_health_checks[count.index], "protocol")}"
   }
-  tags                  = "${merge(map("Name", format("%s-%s", lookup(var.target_groups[count.index], "name"), lookup(var.target_groups[count.index], "port"))), var.tags)}"
+  #tags                  = "${merge(map("Name", format("%s-%s", lookup(var.target_groups[count.index], "name"), lookup(var.target_groups[count.index], "port"))), var.tags)}"
+  tags                  = "${merge(map("Name", format("%s-%s", var.name, lookup(var.target_groups[count.index], "name"))), var.tags)}"
 }
