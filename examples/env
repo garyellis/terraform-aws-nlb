@@ -1,0 +1,20 @@
+function get_subnets(){
+    aws ec2 describe-subnets --filters Name=vpc-id,Values=$1 | \
+    jq -r '.Subnets[] | [.SubnetId, (.Tags[]|select(.Key=="Name").Value)] | @tsv' | \
+    awk -v subnet_name="$2" '$0 ~ subnet_name {print $1}'
+}
+
+PUBLIC_SUBNET_NAME="public-[abc]"
+PRIVATE_SUBNET_NAME="private-[abc]"
+
+export VPC_ID=$(aws ec2 describe-vpcs --filter "Name=tag:Name,Values=gellis"|jq -r '.Vpcs[].VpcId')
+
+export PUBLIC_SUBNETS=$(printf '"%s",' $(get_subnets $VPC_ID $PUBLIC_SUBNET_NAME))
+export PRIVATE_SUBNETS=$(printf '"%s",' $(get_subnets $VPC_ID $PRIVATE_SUBNET_NAME))
+
+export TF_VAR_vpc_id=$VPC_ID
+export TF_VAR_public_subnets=[${PUBLIC_SUBNETS}]
+export TF_VAR_private_subnets=[${PRIVATE_SUBNETS}]
+
+tags=$(printf "%s" "environment_stage = \"gellis\"")
+export TF_VAR_tags={${tags}}
