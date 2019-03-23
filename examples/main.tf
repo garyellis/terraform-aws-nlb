@@ -106,11 +106,11 @@ locals {
   ]
   listeners_count            = "2"
   target_groups              = [
-    { name = "https",     target_type = "instance", port = "443",  proxy_protocol_v2 = "false" },
+    { name = "https",     target_type = "instance", port = "443",  proxy_protocol_v2 = "false", deregistration_delay = "5" },
     { name = "apiserver", target_type = "instance", port = "6443", proxy_protocol_v2 = "false" },
   ]
   target_groups_ip     = [
-    { name = "httpsip",     target_type = "ip", port = "443",  proxy_protocol_v2 = "false" },
+    { name = "httpsip",     target_type = "ip", port = "443",  proxy_protocol_v2 = "false"},
     { name = "apiserverip", target_type = "ip", port = "6443", proxy_protocol_v2 = "false" },
   ]
 

@@ -113,9 +113,10 @@ resource "aws_lb_target_group" "target_group" {
 
   name                  = "${format("%s-%s", var.name, lookup(var.target_groups[count.index], "name"))}"
   port                  = "${lookup(var.target_groups[count.index], "port")}"
-  proxy_protocol_v2     = "${lookup(var.target_groups[count.index], "proxy_protocol_v2")}"
+  proxy_protocol_v2     = "${lookup(var.target_groups[count.index], "proxy_protocol_v2", false)}"
   protocol              = "TCP"
-  target_type           = "${lookup(var.target_groups[count.index], "target_type")}"
+  target_type           = "${lookup(var.target_groups[count.index], "target_type", "instance")}"
+  deregistration_delay  = "${lookup(var.target_groups[count.index], "deregistration_delay", 60)}"
   vpc_id                = "${var.vpc_id}"
 
   health_check {
