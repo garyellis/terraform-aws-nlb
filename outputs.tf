@@ -1,15 +1,18 @@
 output "lb_arn" {
-  value = "${local.lb_arn}"
+  value = join("",aws_lb.lb.*.arn)
 }
 
 output "lb_zone_id" {
-  value = "${local.lb_zone_id}"
+  value = join("",aws_lb.lb.*.zone_id)
 }
 
 output "lb_dns_name" {
-  value = "${local.lb_dns_name}"
+  value = join("",aws_lb.lb.*.zone_id)
 }
 
 output "target_group_arns" {
-  value = "${join(" ", aws_lb_target_group.target_group.*.arn)}"
+  value = [
+    for arn in aws_lb_target_group.target_group.*.arn:
+      arn
+  ]
 }

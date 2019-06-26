@@ -1,26 +1,30 @@
 variable "enable_deletion_protection" {
   description = "enable lb delete protection"
-  default = "false"
+  type = bool
+  default = false
 }
 
 variable "eip_allocation_ids" {
-  description = "A list of up to three EIP allocation IDs (one for each availability zone)."
-  type = "list"
+  description = "A list of EIP allocation IDs (one per AZ)"
+  type = list(string)
   default = []
 }
 
 variable "internal" {
-  description = "internal load balancer"
+  description = "flag to set as internal load balancer"
+  type = bool
 }
 
 variable "listeners" {
   description = "A list of elb listeners"
+  type = list(map(string))
   default = []
 }
 
 variable "listeners_count" {
   description = "number of listeners in the listeners list variable"
-  default = "0"
+  type = number
+  default = 0
 }
 
 variable "name" {
@@ -29,30 +33,34 @@ variable "name" {
 
 variable "subnets" {
   description = "A  list of up to three subnet ids (one for each availability zone)."
-  type = "list"
+  type = list(string)
 }
 
 variable "tags" {
   description = "a map of tags"
-  type = "map"
+  type = map(string)
   default = {}
 }
 
 variable "target_groups" {
   description = "A list of target group maps"
+  type = list(map(string))
   default = []
 }
 
 variable "target_groups_count" {
   description = "number of target groups in the target_groups list variable"
-  default = "0"
+  type = number
+  default = 0
 }
 
 variable "target_group_health_checks" {
   description = "A list of target group health checks. The list index must match the corresponding target groups list index"
+  type = list(map(string))
   default = []
 }
 
 variable "vpc_id" {
   description = "the nlb vpc id"
+  type = string
 }
