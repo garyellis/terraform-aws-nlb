@@ -7,7 +7,7 @@ output "lb_zone_id" {
 }
 
 output "lb_dns_name" {
-  value = join("",aws_lb.lb.*.zone_id)
+  value = join("",aws_lb.lb.*.dns_name)
 }
 
 output "target_group_arns" {
