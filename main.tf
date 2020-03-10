@@ -19,7 +19,7 @@ resource "aws_lb" "lb" {
   tags  = merge(map("Name", var.name), var.tags)
 
   lifecycle {
-    ignore_changes = ["subnet_mapping"]
+    ignore_changes = [subnet_mapping]
   }
 }
 
