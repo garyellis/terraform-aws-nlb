@@ -46,13 +46,19 @@ resource "aws_lb_target_group" "target_group" {
   deregistration_delay  = lookup(var.target_groups[count.index], "deregistration_delay", 60)
   vpc_id                = var.vpc_id
 
-  health_check {
-    healthy_threshold   = lookup(var.target_group_health_checks[count.index], "healthy_threshold")
-    unhealthy_threshold = lookup(var.target_group_health_checks[count.index], "unhealthy_threshold")
-    interval            = lookup(var.target_group_health_checks[count.index], "interval")
-    path                = lookup(var.target_group_health_checks[count.index], "path")
-    protocol            = lookup(var.target_group_health_checks[count.index], "protocol")
+  dynamic "health_check" {
+    for_each = var.target_group_health_checks
+    iterator = target_group_health_checks
+    content {
+      healthy_threshold   = lookup(target_group_health_checks.value, "healthy_threshold")
+      unhealthy_threshold = lookup(target_group_health_checks.value, "unhealthy_threshold")
+      interval            = lookup(target_group_health_checks.value, "interval")
+      path                = lookup(target_group_health_checks.value, "path", null)
+      matcher             = lookup(target_group_health_checks.value, "matcher", null)
+      protocol            = lookup(target_group_health_checks.value, "protocol")
+    }
   }
+
 
   tags                  = merge(map("Name", format("%s-%s", var.name, lookup(var.target_groups[count.index], "name"))), var.tags)
 }
