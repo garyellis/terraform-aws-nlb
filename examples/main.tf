@@ -26,7 +26,6 @@ module "lb_internal_tg_instance" {
   subnets                    = var.private_subnets
   target_groups_count        = 2
   target_groups              = local.target_groups
-  target_group_health_checks = local.target_group_health_checks
   vpc_id                     = var.vpc_id
   tags                       = var.tags
 }
@@ -44,7 +43,6 @@ module "lb_internal_tg_ip" {
   subnets                    = var.private_subnets
   target_groups_count        = 2
   target_groups              = local.target_groups_ip
-  target_group_health_checks = local.target_group_health_checks
   vpc_id                     = var.vpc_id
 
   tags                       = var.tags
@@ -62,7 +60,6 @@ module "external_lb" {
   subnets                    = var.public_subnets
   target_groups_count        = "2"
   target_groups              = local.target_groups
-  target_group_health_checks = local.target_group_health_checks
   vpc_id                     = var.vpc_id
   
   tags                       = var.tags
@@ -81,7 +78,6 @@ module "external_lb_eip_allocations" {
   subnets                    = var.public_subnets
   target_groups_count        = 2
   target_groups              = local.target_groups
-  target_group_health_checks = local.target_group_health_checks
   vpc_id                     = var.vpc_id
   tags                       = var.tags
 }
@@ -101,17 +97,18 @@ locals {
   ]
   listeners_count            = 2
   target_groups              = [
-    { name = "https",     target_type = "instance", port = "443",  proxy_protocol_v2 = "false", deregistration_delay = "5" },
-    { name = "apiserver", target_type = "instance", port = "6443", proxy_protocol_v2 = "false" },
+    { name = "https",     target_type = "instance", port = "443",  proxy_protocol_v2 = "false", deregistration_delay = "5", health_check = local.target_group_health_checks[0]},
+    { name = "apiserver", target_type = "instance", port = "6443", proxy_protocol_v2 = "false", health_check = local.target_group_health_checks[1] },
   ]
   target_groups_ip           = [
-    { name = "httpsip",     target_type = "ip", port = "443",  proxy_protocol_v2 = "false"},
-    { name = "apiserverip", target_type = "ip", port = "6443", proxy_protocol_v2 = "false" },
+    { name = "httpsip",     target_type = "ip", port = "443",  proxy_protocol_v2 = "false", health_check = local.target_group_health_checks[0] },
+    { name = "apiserverip", target_type = "ip", port = "6443", proxy_protocol_v2 = "false", health_check = local.target_group_health_checks[1]},
   ]
 
   target_group_health_checks = [
-    { target_groups_index = "0", protocol = "HTTPS", path = "/healthz", port = "443",  interval = "10", healthy_threshold = "2", unhealthy_threshold = "2" },
-    { target_groups_index = "1", protocol = "HTTPS", path = "/healthz", port = "6443", interval = "10", healthy_threshold = "2", unhealthy_threshold = "2" },
+    { protocol = "HTTPS", path = "/healthz", port = "traffic-port",  interval = "10", healthy_threshold = "2", unhealthy_threshold = "2" },
+    { protocol = "HTTPS", path = "/healthz", port = "traffic-port", interval = "10", healthy_threshold = "2", unhealthy_threshold = "2" },
   ]
+
   target_groups_count        = 2
 }

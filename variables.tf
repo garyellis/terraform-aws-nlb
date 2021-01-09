@@ -44,7 +44,7 @@ variable "tags" {
 
 variable "target_groups" {
   description = "A list of target group maps"
-  type = list(map(string))
+  type = any
   default = []
 }
 
@@ -52,12 +52,6 @@ variable "target_groups_count" {
   description = "number of target groups in the target_groups list variable"
   type = number
   default = 0
-}
-
-variable "target_group_health_checks" {
-  description = "A list of target group health checks. The list index must match the corresponding target groups list index"
-  type = list(map(string))
-  default = []
 }
 
 variable "vpc_id" {

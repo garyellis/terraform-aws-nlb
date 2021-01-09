@@ -17,18 +17,17 @@ Creates the following network load balancer configurations:
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
+|------|-------------|------|---------|:--------:|
 | eip\_allocation\_ids | A list of EIP allocation IDs (one per AZ) | `list(string)` | `[]` | no |
 | enable\_deletion\_protection | enable lb delete protection | `bool` | `false` | no |
-| internal | internal load balancer | `bool` | n/a | yes |
-| listeners | A list of elb listeners | `list(string)` | `[]` | no |
+| internal | flag to set as internal load balancer | `bool` | n/a | yes |
+| listeners | A list of elb listeners | `list(map(string))` | `[]` | no |
 | listeners\_count | number of listeners in the listeners list variable | `number` | `0` | no |
-| name | the resources name | `string` | n/a | yes |
-| subnets | A  list of subnet ids (one per AZ) | `list(string)` | n/a | yes |
+| name | the resource name | `any` | n/a | yes |
+| subnets | A  list of up to three subnet ids (one for each availability zone). | `list(string)` | n/a | yes |
 | tags | a map of tags | `map(string)` | `{}` | no |
-| target\_group\_health\_checks | A list of target group health checks. The list index must match the corresponding target groups list index | `list(string)` | `[]` | no |
-| target\_groups | A list of target group maps | `list(map(string))` | `[]` | no |
-| target\_groups\_count | number of target groups in the target_groups list variable | `number` | `0` | no |
+| target\_groups | A list of target group maps | `any` | `[]` | no |
+| target\_groups\_count | number of target groups in the target\_groups list variable | `number` | `0` | no |
 | vpc\_id | the nlb vpc id | `string` | n/a | yes |
 
 ## Outputs
