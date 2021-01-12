@@ -1,4 +1,4 @@
-# tf_module_aws_nlb
+# terraform-aws-nlb
 Creates the following network load balancer configurations:
 
 * Internal load balancer in one or more AZs
